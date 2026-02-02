@@ -9,3 +9,5 @@ class Haircut {
     required this.price,
   });
 }
+
+
