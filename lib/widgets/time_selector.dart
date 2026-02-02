@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TimeSelector extends StatefulWidget {
-  const TimeSelector({super.key});
+  final Function(String) onTimeSelected;
+
+  const TimeSelector({super.key, required this.onTimeSelected});
 
   @override
   State<TimeSelector> createState() => _TimeSelectorState();
@@ -25,23 +27,28 @@ class _TimeSelectorState extends State<TimeSelector> {
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 8,
+      runSpacing: 8,
       children: times.map((time) {
-        final isSelected = time == selectedTime;
+        final isSelected = selectedTime == time;
 
         return ChoiceChip(
           label: Text(time),
           selected: isSelected,
-          selectedColor: Colors.black,
+          selectedColor: Theme.of(context).primaryColor,
           labelStyle: TextStyle(
             color: isSelected ? Colors.white : Colors.black,
+            fontWeight: FontWeight.w600,
           ),
           onSelected: (_) {
             setState(() {
               selectedTime = time;
             });
+            widget.onTimeSelected(time);
           },
         );
       }).toList(),
     );
   }
 }
+
+
