@@ -1,41 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:alphabarber22/models/haircut.dart';
-import 'package:alphabarber22/widgets/date_selector.dart';
-import 'package:alphabarber22/widgets/time_selector.dart';
+import '../../models/haircut.dart';
+import '../../widgets/date_selector.dart';
 
-class BookingScreen extends StatelessWidget {
+class BookingScreen extends StatefulWidget {
   final Haircut haircut;
 
-  const BookingScreen({
-    super.key,
-    required this.haircut,
-  });
+  const BookingScreen({super.key, required this.haircut});
+
+  @override
+  State<BookingScreen> createState() => _BookingScreenState();
+}
+
+class _BookingScreenState extends State<BookingScreen> {
+  DateTime? selectedDate;
+
+  void _confirmBooking() {
+    if (selectedDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selecione uma data para continuar'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Agendamento confirmado para '
+          '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
+        ),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agendar horário'),
+        title: Text(widget.haircut.title),
       ),
-      body: ListView(
+      body: Padding(
         padding: const EdgeInsets.all(16),
-        children: [
-          ListTile(
-            title: Text(haircut.name),
-            subtitle: Text('R\$ ${haircut.price.toStringAsFixed(2)}'),
-          ),
-          const SizedBox(height: 16),
-          DateSelector(), // 🚫 sem const
-          const SizedBox(height: 16),
-          TimeSelector(), // 🚫 sem const
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Confirmar agendamento'),
-          ),
-        ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.haircut.description,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+
+            DateSelector(
+              selectedDate: selectedDate,
+              onDateSelected: (date) {
+                setState(() {
+                  selectedDate = date;
+                });
+              },
+            ),
+
+            const Spacer(),
+
+            ElevatedButton(
+              onPressed: _confirmBooking,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+              ),
+              child: const Text(
+                'Confirmar Agendamento',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
 
