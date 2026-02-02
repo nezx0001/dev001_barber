@@ -1,49 +1,50 @@
 import 'package:flutter/material.dart';
 import '../../models/haircut.dart';
 import '../../widgets/haircut_card.dart';
+import '../../core/app_routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<Haircut> haircuts = [
-  Haircut(
-    title: 'Corte Clássico',
-    description: 'Tesoura e máquina',
-    price: 40.0,
-  ),
-  Haircut(
-    title: 'Corte Fade',
-    description: 'Degradê moderno',
-    price: 45.0,
-  ),
-  Haircut(
-    title: 'Barba',
-    description: 'Navalha e acabamento',
-    price: 30.0,
-  ),
-  Haircut(
-    title: 'Corte + Barba',
-    description: 'Pacote completo',
-    price: 65.0,
-  ),
-];
-
+    final haircuts = [
+      Haircut(
+        title: 'Corte Clássico',
+        description: 'Tradicional e elegante',
+        price: 40,
+      ),
+      Haircut(
+        title: 'Degradê',
+        description: 'Moderno e estiloso',
+        price: 45,
+      ),
+      Haircut(
+        title: 'Barba',
+        description: 'Barba completa',
+        price: 30,
+      ),
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('alphaBarber22'),
-      ),
+      appBar: AppBar(title: const Text('AlphaBarber22')),
       body: ListView.builder(
+        padding: const EdgeInsets.all(16),
         itemCount: haircuts.length,
         itemBuilder: (context, index) {
-          return HaircutCard(haircut: haircuts[index]);
+          return HaircutCard(
+            haircut: haircuts[index],
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.booking,
+                arguments: haircuts[index],
+              );
+            },
+          );
         },
       ),
     );
   }
 }
-
 
